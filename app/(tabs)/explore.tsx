@@ -1,11 +1,10 @@
-import { StyleSheet, View, Text } from "react-native";
+import { View } from "react-native";
+import WeekDays from "@/components/WeekDays";
 
-export default function TabTwoScreen() {
+export default function ExploreScreen() {
   return (
-    <View>
-      <Text>Explore Screen</Text>
+    <View className="bg-slate-50 h-screen">
+      <WeekDays />
     </View>
   );
 }
-
-const styles = StyleSheet.create({});
