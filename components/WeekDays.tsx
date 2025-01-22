@@ -7,7 +7,15 @@ import { Text } from "./ui/text";
 import { Heading } from "./ui/heading";
 import { es } from "date-fns/locale";
 
-export default function WeekDays() {
+type WeekDaysProps = {
+  selectedDate: string;
+  setSelectedDate: (date: string) => void;
+};
+
+export default function WeekDays({
+  selectedDate,
+  setSelectedDate,
+}: WeekDaysProps) {
   // Fecha base para la semana actual
   const [currentWeek, setCurrentWeek] = useState(
     startOfWeek(new Date(), { weekStartsOn: 1 })
@@ -19,9 +27,10 @@ export default function WeekDays() {
       const date = addDays(currentWeek, i);
       return {
         dayName: format(date, "EEE", { locale: es }),
-        date: format(date, "dd"),
+        date: format(date, "yyyy-MM-dd"),
         isToday:
           format(new Date(), "yyyy-MM-dd") === format(date, "yyyy-MM-dd"),
+        isSelected: selectedDate === format(date, "yyyy-MM-dd"),
       };
     });
   };
@@ -60,9 +69,16 @@ export default function WeekDays() {
         }}
         renderItem={({ item }) => (
           <TouchableOpacity
-            style={item.isToday && styles.todayTextContent}
+            style={[
+              item.isToday && styles.todayContent,
+              item.isSelected &&
+                !item.isToday && {
+                  backgroundColor: Colors.light.cardPrimary,
+                },
+            ]}
             className="p-2 items-center rounded-tl-full rounded-tr-full"
             activeOpacity={0.8}
+            onPress={() => setSelectedDate(item.date)}
           >
             <View
               style={[
@@ -73,7 +89,7 @@ export default function WeekDays() {
               className="w-10 h-10 rounded-full flex items-center justify-center"
             >
               <Text size="sm" style={item.isToday && styles.dateText}>
-                {item.date}
+                {parseInt(item.date.split("-")[2])}
               </Text>
             </View>
             <Text
@@ -99,7 +115,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 15,
   },
-  todayTextContent: {
+  todayContent: {
     backgroundColor: Colors.light.cardSecondary,
   },
   dateContent: {
