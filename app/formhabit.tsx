@@ -6,6 +6,7 @@ import { StatusBar } from "expo-status-bar";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { NotebookPen } from "lucide-react-native";
 import { Text } from "@/components/ui/text";
+import Calendars from "@/components/Calendars";
 
 const categories = [
   "Deportes",
@@ -25,26 +26,32 @@ export default function FormHabitScreen() {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-      <StatusBar backgroundColor={Colors.light.cardSecondary} style="light" />
+      <StatusBar backgroundColor={Colors.light.background} />
       <Stack.Screen
         options={{
           headerTitle: "Agregar un nuevo habito",
           headerShadowVisible: false,
-          headerStyle: { backgroundColor: Colors.light.cardSecondary },
-          headerTintColor: Colors.light.background,
+          headerStyle: { backgroundColor: Colors.light.background },
+          headerTintColor: Colors.light.text,
+          headerTitleStyle: { fontSize: 18 },
+          headerTitleAlign: "center",
         }}
       />
-      <Input className="bg-red-900/20 mb-4" style={styles.input}>
+      <Input className="mb-4 bg-slate-300/30" style={styles.input}>
         <InputField
           placeholder="Por ej.: Jugar al tenis..."
-          className="text-white"
+          className="text-slate-900"
         />
         <InputSlot className="pr-3">
-          <InputIcon as={NotebookPen} className="text-slate-50/50" />
+          <InputIcon as={NotebookPen} className="text-slate-700" />
         </InputSlot>
       </Input>
       <View>
-        <Text size="md" className="text-slate-50 font-bold my-1">
+        <Text
+          size="md"
+          className="font-bold my-1"
+          style={{ color: Colors.light.text }}
+        >
           Selecciona una categoria
         </Text>
         <View className="flex flex-row flex-wrap gap-2 py-2">
@@ -56,13 +63,13 @@ export default function FormHabitScreen() {
               style={{
                 backgroundColor:
                   selectedCategory === item
-                    ? Colors.light.cardPrimary
-                    : Colors.light.cardSecondary,
+                    ? Colors.light.cardSecondary
+                    : Colors.light.background,
                 borderWidth: 1,
                 borderColor:
                   selectedCategory === item
-                    ? Colors.light.cardPrimary
-                    : Colors.light.text,
+                    ? Colors.light.cardSecondary
+                    : "#6b6666",
               }}
               onPress={() => setSelectedCategory(item)}
             >
@@ -71,8 +78,8 @@ export default function FormHabitScreen() {
                 style={{
                   color:
                     selectedCategory === item
-                      ? Colors.light.text
-                      : Colors.light.background,
+                      ? Colors.light.background
+                      : "#6b6666",
                   fontWeight: "bold",
                 }}
               >
@@ -82,18 +89,33 @@ export default function FormHabitScreen() {
           ))}
         </View>
       </View>
+      <Calendars />
+      <TouchableOpacity style={styles.containerButton} activeOpacity={0.8}>
+        <Text size="sm" className="text-slate-50 font-bold">
+          Agregar habito
+        </Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.light.cardSecondary,
-    padding: 20,
+    backgroundColor: Colors.light.background,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   input: {
     borderRadius: 10,
     borderWidth: 0,
     height: 40,
+  },
+  containerButton: {
+    backgroundColor: Colors.light.cardSecondary,
+    height: 40,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 40,
   },
 });
