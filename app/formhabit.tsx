@@ -7,6 +7,7 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { NotebookPen } from "lucide-react-native";
 import { Text } from "@/components/ui/text";
 import Calendars from "@/components/Calendars";
+import TimePicker from "@/components/TimePicker";
 
 const categories = [
   "Deportes",
@@ -29,7 +30,7 @@ export default function FormHabitScreen() {
       <StatusBar backgroundColor={Colors.light.background} />
       <Stack.Screen
         options={{
-          headerTitle: "Agregar un nuevo habito",
+          headerTitle: "Agregar un nuevo hábito",
           headerShadowVisible: false,
           headerStyle: { backgroundColor: Colors.light.background },
           headerTintColor: Colors.light.text,
@@ -90,6 +91,7 @@ export default function FormHabitScreen() {
         </View>
       </View>
       <Calendars />
+      <TimePicker />
       <TouchableOpacity style={styles.containerButton} activeOpacity={0.8}>
         <Text size="sm" className="text-slate-50 font-bold">
           Agregar habito
