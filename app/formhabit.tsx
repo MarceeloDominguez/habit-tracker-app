@@ -1,5 +1,5 @@
 import { View, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { Stack } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { StatusBar } from "expo-status-bar";
@@ -8,6 +8,7 @@ import { NotebookPen } from "lucide-react-native";
 import { Text } from "@/components/ui/text";
 import Calendars from "@/components/Calendars";
 import TimePicker from "@/components/TimePicker";
+import { useHabitStore } from "@/store/useHabitStore";
 
 const categories = [
   "Deportes",
@@ -23,7 +24,28 @@ const categories = [
 ];
 
 export default function FormHabitScreen() {
-  const [selectedCategory, setSelectedCategory] = useState("Deportes");
+  const {
+    habitName,
+    setHabitName,
+    selectedDateRange,
+    endTime,
+    startTime,
+    selectedCategory,
+    setSelectedCategory,
+  } = useHabitStore();
+
+  const handleAddHabit = () => {
+    const habitData = {
+      habitName,
+      startDate: selectedDateRange.startDate,
+      endDate: selectedDateRange.endDate,
+      endTime,
+      startTime,
+      category: selectedCategory,
+    };
+
+    console.log("Enviando hábito al backend:", habitData);
+  };
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
@@ -40,11 +62,13 @@ export default function FormHabitScreen() {
       />
       <Input className="mb-4 bg-slate-300/30" style={styles.input}>
         <InputField
-          placeholder="Por ej.: Jugar al tenis..."
+          placeholder="Jugar al tenis..."
           className="text-slate-900"
+          value={habitName}
+          onChangeText={(text) => setHabitName(text)}
         />
         <InputSlot className="pr-3">
-          <InputIcon as={NotebookPen} className="text-slate-700" />
+          <InputIcon as={NotebookPen} color={Colors.light.cardSecondary} />
         </InputSlot>
       </Input>
       <View>
@@ -53,7 +77,7 @@ export default function FormHabitScreen() {
           className="font-bold my-1"
           style={{ color: Colors.light.text }}
         >
-          Selecciona una categoria
+          Seleccionar una categoria
         </Text>
         <View className="flex flex-row flex-wrap gap-2 py-2">
           {categories.map((item, index) => (
@@ -92,7 +116,11 @@ export default function FormHabitScreen() {
       </View>
       <Calendars />
       <TimePicker />
-      <TouchableOpacity style={styles.containerButton} activeOpacity={0.8}>
+      <TouchableOpacity
+        style={styles.containerButton}
+        activeOpacity={0.8}
+        onPress={handleAddHabit}
+      >
         <Text size="sm" className="text-slate-50 font-bold">
           Agregar habito
         </Text>

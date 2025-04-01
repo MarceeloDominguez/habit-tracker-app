@@ -1,9 +1,10 @@
 import { View, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { Text } from "@/components/ui/text";
 import { Colors } from "@/constants/Colors";
 import { Calendar1 } from "lucide-react-native";
+import { useHabitStore } from "@/store/useHabitStore";
 
 LocaleConfig.locales["es"] = {
   monthNames: [
@@ -50,20 +51,17 @@ LocaleConfig.locales["es"] = {
 LocaleConfig.defaultLocale = "es";
 
 export default function Calendars() {
-  const [selectedRange, setSelectedRange] = useState<{
-    startDate: string | null;
-    endDate: string | null;
-  }>({ startDate: null, endDate: null });
+  const { selectedDateRange, setSelectedDateRange } = useHabitStore();
 
   const handleDayPress = (day: { dateString: string }) => {
-    const { startDate, endDate } = selectedRange;
+    const { startDate, endDate } = selectedDateRange;
 
     if (!startDate || (startDate && endDate)) {
       // Seleccionar la fecha de inicio
-      setSelectedRange({ startDate: day.dateString, endDate: null });
+      setSelectedDateRange({ startDate: day.dateString, endDate: null });
     } else if (!endDate) {
       // Seleccionar la fecha de fin
-      setSelectedRange({
+      setSelectedDateRange({
         startDate,
         endDate: day.dateString > startDate ? day.dateString : null, // Asegurar que la fecha final sea válida
       });
@@ -72,7 +70,7 @@ export default function Calendars() {
 
   // Marcar las fechas seleccionadas en el calendario
   const getMarkedDates = () => {
-    const { startDate, endDate } = selectedRange;
+    const { startDate, endDate } = selectedDateRange;
     const markedDates: Record<string, any> = {};
 
     if (startDate) {
@@ -111,7 +109,7 @@ export default function Calendars() {
         className="font-bold mb-3"
         style={{ color: Colors.light.text }}
       >
-        Seleccione una fecha de Inicio y Final
+        Seleccionar una fecha de Inicio y Final
       </Text>
       <View
         style={{ height: 40, borderRadius: 10 }}
@@ -119,16 +117,16 @@ export default function Calendars() {
       >
         <View className="flex-1 items-center flex-row gap-4 justify-center">
           <Text size="sm" className="text-slate-900 font-bold">
-            {selectedRange.startDate || "Inicio"}
+            {selectedDateRange.startDate || "Inicio"}
           </Text>
           <Text size="sm" className="text-slate-900 font-bold">
             -
           </Text>
           <Text size="sm" className="text-slate-900 font-bold">
-            {selectedRange.endDate || "Final"}
+            {selectedDateRange.endDate || "Final"}
           </Text>
         </View>
-        <Calendar1 color={Colors.light.text} size={18} />
+        <Calendar1 color={Colors.light.cardSecondary} size={18} />
       </View>
 
       <Calendar

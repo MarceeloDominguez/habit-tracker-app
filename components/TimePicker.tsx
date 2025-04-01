@@ -4,10 +4,10 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Text } from "./ui/text";
 import { Colors } from "@/constants/Colors";
 import { Clock } from "lucide-react-native";
+import { useHabitStore } from "@/store/useHabitStore";
 
 export default function TimePicker() {
-  const [startTime, setStartTime] = useState<Date | null>(null);
-  const [endTime, setEndTime] = useState<Date | null>(null);
+  const { endTime, startTime, setEndTime, setStartTime } = useHabitStore();
   const [isStartPickerVisible, setStartPickerVisible] = useState(false);
   const [isEndPickerVisible, setEndPickerVisible] = useState(false);
 
