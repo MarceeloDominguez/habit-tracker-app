@@ -1,4 +1,10 @@
-import { View, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import React from "react";
 import { Stack } from "expo-router";
 import { Colors } from "@/constants/Colors";
@@ -9,6 +15,7 @@ import { Text } from "@/components/ui/text";
 import Calendars from "@/components/Calendars";
 import TimePicker from "@/components/TimePicker";
 import { useHabitStore } from "@/store/useHabitStore";
+import { supabase } from "@/lib/supabase";
 
 const categories = [
   "Deportes",
@@ -34,17 +41,28 @@ export default function FormHabitScreen() {
     setSelectedCategory,
   } = useHabitStore();
 
-  const handleAddHabit = () => {
+  const formatTime = (date: string | Date) => {
+    return new Date(date).toISOString().split("T")[1].split(".")[0];
+  };
+
+  const handleAddHabit = async () => {
     const habitData = {
-      habitName,
-      startDate: selectedDateRange.startDate,
-      endDate: selectedDateRange.endDate,
-      endTime,
-      startTime,
+      habit_name: habitName,
+      start_date: selectedDateRange.startDate,
+      end_date: selectedDateRange.endDate,
+      start_time: formatTime(startTime!),
+      end_time: formatTime(endTime!),
       category: selectedCategory,
     };
 
-    console.log("Enviando hábito al backend:", habitData);
+    const { error } = await supabase.from("habits").insert([habitData]);
+
+    if (error) {
+      console.error("Error al agregar hábito:", error.message);
+      Alert.alert("Error", "No se pudo agregar el hábito");
+    } else {
+      Alert.alert("Éxito", "Hábito agregado correctamente");
+    }
   };
 
   return (
